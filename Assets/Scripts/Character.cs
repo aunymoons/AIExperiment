@@ -11,11 +11,13 @@ public class Character : MonoBehaviour
     public AICharacterControl aiCharacter;
 
     //PLAYER DATA
+    public bool isMain;
     public string characterName;
     public Activity currentActivity;
 
     //PLAYER PREFERENCES
     public List<string> likedActivities, dislikedActivities;
+    public Dictionary<string, string> likedDialogues, dislikedDialogues;
 
     //UI
     public Text mood;
@@ -32,6 +34,12 @@ public class Character : MonoBehaviour
             likedActivities = new List<string>();
         if (dislikedActivities == null)
             dislikedActivities = new List<string>();
+
+        //DIALOGUES
+        if (likedDialogues == null)
+            likedDialogues = new Dictionary<string, string>();
+        if (dislikedDialogues == null)
+            dislikedDialogues = new Dictionary<string, string>();
 
         if (likedActivities.Count == 0 && dislikedActivities.Count == 0)
             DecideOpinions();
@@ -66,14 +74,19 @@ public class Character : MonoBehaviour
             if (random == 0)
             {
                 likedActivities.Add(worldController.activities[i].activityName);
+                likedDialogues.Add(worldController.activities[i].activityName, characterName + " thinks we should SAVE the " + worldController.activities[i].activityName + " module");
+
             }
             else
             {
                 dislikedActivities.Add(worldController.activities[i].activityName);
+                dislikedDialogues.Add(worldController.activities[i].activityName, characterName + " thinks we should DESTROY the " + worldController.activities[i].activityName + " module");
+
             }
         }
     }
 
+    //OPINION AND DIALOGUE
     void CheckOpinion(string currentActivityName)
     {
         for (int i = 0; i < dislikedActivities.Count; i++)
@@ -96,12 +109,38 @@ public class Character : MonoBehaviour
         }
     }
 
+    public string CheckDialogue()
+    {
+        string result = "";
+    
+        for(int i = 0; i < likedActivities.Count; i++)
+        {
+            if (likedActivities[i] == currentActivity.activityName)
+            {
+                
+               likedDialogues.TryGetValue(currentActivity.activityName, out result);
+                return result;
+            }
+        }
+        for (int i = 0; i < dislikedActivities.Count; i++)
+        {
+            if (dislikedActivities[i] == currentActivity.activityName)
+            {
+                dislikedDialogues.TryGetValue(currentActivity.activityName, out result);
+                return result;
+            }
+        }
+
+        return result;
+
+    }
+
     //MOVEMENT
     public void MoveTowardsActivity(string activityName)
     {
         if (activityName == "Base")
         {
-            aiCharacter.target = worldController.baseActivity.GetAvailableSlot();
+            aiCharacter.target = worldController.baseActivity.GetAvailableSlot(this);
             mood.text = "";
         }
         else
@@ -110,7 +149,7 @@ public class Character : MonoBehaviour
             {
                 if (activityName == worldController.activities[i].activityName)
                 {
-                    aiCharacter.target = worldController.activities[i].GetAvailableSlot();
+                    aiCharacter.target = worldController.activities[i].GetAvailableSlot(this);
                 }
             }
         }

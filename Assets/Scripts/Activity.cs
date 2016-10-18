@@ -6,14 +6,16 @@ using System.Collections.Generic;
 public class Activity : MonoBehaviour
 {
     //REFERENCE
+    public WorldController worldController;
     public string activityName;
 
     //STATES
-    public bool isDone, activityVisited, hasPlayers, isCrucial;
+    public bool isDone, activityVisited, hasPlayers, isCrucial, isMainActivity;
 
     //SLOTS
     public int capacity;
     public List<Transform> characterSlots;
+    public List<Character> characterReferences;
 
     //VOTES
     public int positiveVotes, negativeVotes;
@@ -49,7 +51,7 @@ public class Activity : MonoBehaviour
     {
         //Resets Capacity
         capacity = characterSlots.Count;
-        //Resets players
+
         hasPlayers = false;
     }
 
@@ -63,14 +65,18 @@ public class Activity : MonoBehaviour
     /*---CALLED BY CHARACTERS---*/
 
     //RETURN AVAILABLE SLOT TRANSFORM
-    public Transform GetAvailableSlot()
+    public Transform GetAvailableSlot(Character character)
     {
         //If activity hasnt been visited, flag as visited
-        if(!activityVisited) activityVisited = true;
+        if (!activityVisited) activityVisited = true;
         //If activity didnt have any players, flag as containing players
-        if(!hasPlayers) hasPlayers = true;
+        if (!hasPlayers) hasPlayers = true;
         //Decrease Capacity
         capacity -= 1;
+
+        //AddCharacter
+        characterReferences.Add(character);
+
         //Return transform
         return characterSlots[capacity];
     }
@@ -96,8 +102,31 @@ public class Activity : MonoBehaviour
                     resultText.text = "DONE";
                 }
             }
-            
+
         }
+    }
+
+    //GET ACCORDING DIALOGUE
+    public void GetDialogue()
+    {
+        string fullDialogue = "";
+
+        for (int i = 0; i < characterReferences.Count; i++)
+        {
+            if (!characterReferences[i].isMain)
+            {
+                fullDialogue = fullDialogue + " " + characterReferences[i].CheckDialogue();
+            }
+            if (characterReferences[i].isMain)
+            {
+                isMainActivity = true;
+            }
+        }
+
+        worldController.dialogueText.text = fullDialogue;
+        
+        //Resets players
+        characterReferences.Clear();
     }
 
     //DETERMINE RESULT BASED ON PLAYERS

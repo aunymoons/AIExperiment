@@ -11,11 +11,12 @@ public class WorldController : MonoBehaviour
     public Activity baseActivity;
     public List<Activity> activities;
     public List<string> activitiesNames;
-    public string lastSelectedActivity;
+    public string lastSelectedActivity, playerSelectedActivity;
     public List<Character> characters;
 
     //UI
-    public GameObject optionCanvas;
+    public GameObject optionCanvas, dialogueCanvas, activityCanvas;
+    public Text dialogueText;
     public List<Button> optionButtons;
     public Button baseButton;
 
@@ -155,6 +156,7 @@ public class WorldController : MonoBehaviour
     {
         //Hide UI
         HideOptions();
+        HideDialogueCanvas();
         
         //If game is not over yet
         if (!gameIsOver)
@@ -172,21 +174,27 @@ public class WorldController : MonoBehaviour
             //If there are any available activities
             else
             {
-
                 //Make Player selection
                 SelectActivityPlayer(selection);
 
                 //Make AI selection
                 SelectActivityAI();
-                
+
+                //Gets the dialogue
+                GetActivityByName(playerSelectedActivity).GetDialogue();
+
                 //passes turn
                 turnCounter++;
             }
+
             //Resets Available activities
             ResetActivities();
 
             //Shows remaining options
             ShowOptions();
+
+            //Show dialogue canvas
+            ShowDialogueCanvas();
         }
         //If game is over show results
         else
@@ -208,6 +216,8 @@ public class WorldController : MonoBehaviour
                 mainCharacter.CheckSpecificSchedule(GetSpecificActivity(i));
                 //Perform activity 
                 activities[option].PerformActivity(true);
+                //Sets variable
+                playerSelectedActivity = activities[option].activityName;
                 //Ends this loop
                 break;
             }
@@ -220,17 +230,6 @@ public class WorldController : MonoBehaviour
         //Tell NPC AIs to select and perform the remaining activities
         AssignActivities();
         PerformAllActivities();
-    }
-
-    //PERFORM ALL ACTIVITIES
-    public void PerformAllActivities()
-    {
-        //For every listed activity
-        for (int x = 0; x < activities.Count; x++)
-        {
-            //Perform such activity as an NPC
-            activities[x].PerformActivity(false);
-        }
     }
 
     //TELLS CHARACTERS TO FETCH ACTIVITIES TO DO
@@ -250,6 +249,19 @@ public class WorldController : MonoBehaviour
             }
         }
     }
+
+    //PERFORM ALL ACTIVITIES
+    public void PerformAllActivities()
+    {
+        //For every listed activity
+        for (int x = 0; x < activities.Count; x++)
+        {
+            //Perform such activity as an NPC
+            activities[x].PerformActivity(false);
+        }
+    }
+
+    
 
     //HIDE AVAILABLE ACTIVITIES
     public void HideOptions()
@@ -285,6 +297,21 @@ public class WorldController : MonoBehaviour
         {
             LooseGame();
         }
+    }
+
+
+    /*---UI---*/
+
+    //SHOW DIALOGUE CANVAS
+    public void ShowDialogueCanvas()
+    {
+        dialogueCanvas.SetActive(true);
+    }
+
+    //HIDE DIALOGUE CANVAS
+    public void HideDialogueCanvas()
+    {
+        dialogueCanvas.SetActive(false);
     }
 
     /*---UTILITIES---*/
@@ -386,9 +413,7 @@ public class WorldController : MonoBehaviour
         }
         return result;
     }
-
-    
-
+ 
     //GET ACTIVITY REFERENCE BY NAME
     public Activity GetActivityByName(string name)
     {
