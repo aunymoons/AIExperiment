@@ -5,10 +5,9 @@ public class CrawlerUnit : Software {
 
     //REFERENES
     EconomyGC economyGC;
-    Software target;
+    Firewall target;
 
     //MAIN VARIABLES
-    public int HealthPoints, DamagePoints;
 
     //MOVEMENT
     public int walkingSpeed;
@@ -21,7 +20,7 @@ public class CrawlerUnit : Software {
         if (economyGC == null) economyGC = FindObjectOfType<EconomyGC>();
 
         //Removes RAM from team who spawned it
-        economyGC.RemoveRamFromPlayer(ramCost, team);
+        economyGC.RemoveRamFromPlayer(ramCost, currentTeamName);
         
 	}
 	
@@ -31,22 +30,39 @@ public class CrawlerUnit : Software {
 	}
 
     //MAIN METHODS
-
+    
+    //Movement
     void Crawl()
     {
 
     }
 
-    void Die()
+    //Death
+    public override void Die()
+    {
+        AnimateDeath();
+        economyGC.AddRamToPlayer(ramCost, enemyTeamName);
+    }
+
+    //DAMAGE
+    public override void DealDamage(Software targetObject)
+    {
+        base.DealDamage(targetObject);
+        //extend functionality
+    }
+
+    public override void ReceiveDamage(int damage)
+    {
+        base.ReceiveDamage(damage);
+        //Extend functionality
+    }
+
+    //ANIMATION
+    public override void AnimateSpawn()
     {
 
     }
-
-    public void DealDamage()
-    {
-
-    }
-    public void ReceiveDamage()
+    public override void AnimateDeath()
     {
 
     }
@@ -56,9 +72,10 @@ public class CrawlerUnit : Software {
     void OnCollisionEnter(Collision collision)
     {
         //If its a firewall
-        if(collision.gameObject.name == "Firewall")
+        if(collision.gameObject.name.Contains("Firewall"))
         {
             target = collision.gameObject.GetComponent<Firewall>();
+            DealDamage(target);
         }
     }
 

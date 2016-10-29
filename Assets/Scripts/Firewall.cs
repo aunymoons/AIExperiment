@@ -3,8 +3,14 @@ using System.Collections;
 
 public class Firewall : Software {
 
-	// Use this for initialization
-	void Start () {
+    //REFERENES
+    EconomyGC economyGC;
+
+    //MAIN VARIABLES
+    public int HealthPoints;
+
+    // Use this for initialization
+    void Start () {
 	
 	}
 	

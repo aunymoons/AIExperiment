@@ -43,6 +43,10 @@ public class EconomyGC : GameController {
         {
             ram_B -= ram;
         }
+        if(team == teamName_A || team == teamName_B)
+        {
+            AnimateRamPoints("-" + ram, team);
+        }
     }
 
     public void AddRamToPlayer(int ram, string team)
@@ -55,12 +59,25 @@ public class EconomyGC : GameController {
         {
             ram_B += ram;
         }
+        if (team == teamName_A || team == teamName_B)
+        {
+            AnimateRamPoints("+" + ram, team);
+        }
     }
 
     //ANIMATIONS AND EFFECTS
-    public void AnimateRamPoints(string team)
+    public void AnimateRamPoints(string points, string team)
     {
-
+        if (team == teamName_A)
+        {
+            //animator_a.settrigger etc...
+            Debug.Log("Team A " + points);
+        }
+        if (team == teamName_B)
+        {
+            //animator_b.settrigger etc...
+            Debug.Log("Team B " + points);
+        }
     }
 
 }
