@@ -1,70 +1,53 @@
 ﻿using UnityEngine;
+using UnityStandardAssets.Characters.ThirdPerson;
+using UnityEngine.UI;
 using System.Collections;
+using System;
 
-public class CrawlerUnit : Software {
+public class CrawlerUnit : Software
+{
+    
+    //REFERENCES
 
-    //REFERENES
-    EconomyGC economyGC;
-    Firewall target;
+    AICharacterControl aiCharacterControl;
 
     //MAIN VARIABLES
 
-    //MOVEMENT
     public int walkingSpeed;
-
-
-	// Use this for initialization
-	void Start () {
-
-        //Makes sure the CrawlerUnit has proper references
-        if (economyGC == null) economyGC = FindObjectOfType<EconomyGC>();
-
-        //Removes RAM from team who spawned it
-        economyGC.RemoveRamFromPlayer(ramCost, currentTeamName);
-        
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
+    public Transform targetTransform;
+    public Image healthBarImage;
 
     //MAIN METHODS
+
+    public override void OnStart()
+    {
+        UpdateHealthBar();
+    }
     
-    //Movement
-    void Crawl()
-    {
+    //ACTIONS
 
-    }
-
-    //Death
-    public override void Die()
+    public override void OnInstall()
     {
-        AnimateDeath();
-        economyGC.AddRamToPlayer(ramCost, enemyTeamName);
-    }
-
-    //DAMAGE
-    public override void DealDamage(Software targetObject)
-    {
-        base.DealDamage(targetObject);
-        //extend functionality
-    }
-
-    public override void ReceiveDamage(int damage)
-    {
-        base.ReceiveDamage(damage);
-        //Extend functionality
+        //Sets walking target depending on team
+        if (currentTeamName == economyGC.teamName_A) aiCharacterControl.target = economyGC.teamNode_B;
+        if (currentTeamName == economyGC.teamName_B) aiCharacterControl.target = economyGC.teamNode_A;
     }
 
     //ANIMATION
-    public override void AnimateSpawn()
-    {
 
+    void UpdateHealthBar()
+    {
+        healthBarImage.fillAmount = healthPoints / maxHealthPoints;
     }
-    public override void AnimateDeath()
-    {
 
+    //DAMAGE
+
+    public override void ReceiveDamage(int damage)
+    {
+        //Base
+        base.ReceiveDamage(damage);
+        //UpdateHealthBar
+        UpdateHealthBar();
     }
 
     //COLLISION
@@ -72,10 +55,14 @@ public class CrawlerUnit : Software {
     void OnCollisionEnter(Collision collision)
     {
         //If its a firewall
-        if(collision.gameObject.name.Contains("Firewall"))
+        if (collision.gameObject.name.Contains("Firewall"))
         {
+            //Sets target as firewall
             target = collision.gameObject.GetComponent<Firewall>();
+            //Deals damage to target
             DealDamage(target);
+            //Dies
+            Die();
         }
     }
 
