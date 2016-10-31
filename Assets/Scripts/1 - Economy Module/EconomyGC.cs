@@ -36,7 +36,7 @@ public class EconomyGC : GameController {
         }
         if(team == teamName_A || team == teamName_B)
         {
-            AnimateRamPoints("-" + ram, team);
+            //AnimateRamPoints("-" + ram, team);
         }
     }
 
@@ -52,7 +52,7 @@ public class EconomyGC : GameController {
         }
         if (team == teamName_A || team == teamName_B)
         {
-            AnimateRamPoints("+" + ram, team);
+            //AnimateRamPoints("+" + ram, team);
         }
     }
 

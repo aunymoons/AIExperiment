@@ -11,7 +11,7 @@ public abstract class Software : MonoBehaviour
     protected Software target;
 
     //MAIN VARIABLES
-    
+
     public string currentTeamName, enemyTeamName; //What team they belong to
     public int ramCost; //Price for installing this software
     public float installTime, uninstallTime; //Installing/uninstalling times
@@ -33,18 +33,22 @@ public abstract class Software : MonoBehaviour
         if (economyGC == null) economyGC = FindObjectOfType<EconomyGC>();
         if (animator == null) animator = GetComponent<Animator>();
 
+        if (economyGC != null) Debug.Log(economyGC);
+
         //Sets healthpoints
         maxHealthPoints = healthPoints;
-
+       
         //Begins installation
         Install();
 
+        //For inherited classes
         OnStart();
     }
+    
     public virtual void OnStart() { }
-
+    
     //ACTIONS
-
+    
     public virtual void Install()
     {
         if (!isInstalled && !isDying)
@@ -167,7 +171,7 @@ public abstract class Software : MonoBehaviour
         //Plays activation sound
         audioSource.PlayOneShot(activateSound);
 
-        
+
     }
 
     public virtual IEnumerator AnimateUninstall()

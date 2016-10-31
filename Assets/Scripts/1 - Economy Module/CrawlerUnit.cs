@@ -2,6 +2,7 @@
 using UnityStandardAssets.Characters.ThirdPerson;
 using UnityEngine.UI;
 using System.Collections;
+using System.Collections.Generic;
 using System;
 
 public class CrawlerUnit : Software
@@ -9,11 +10,12 @@ public class CrawlerUnit : Software
     
     //REFERENCES
 
-    AICharacterControl aiCharacterControl;
+    public AICharacterControl aiCharacterControl;
+    public List<ShootingTower> shootingTowers;
+    
 
     //MAIN VARIABLES
 
-    public int walkingSpeed;
     public Transform targetTransform;
     public Image healthBarImage;
 
@@ -21,6 +23,10 @@ public class CrawlerUnit : Software
 
     public override void OnStart()
     {
+        //Verifies aiCharacterControll is set
+        if (aiCharacterControl == null) aiCharacterControl = GetComponent<AICharacterControl>();
+
+        //Sets the health bar for the first time
         UpdateHealthBar();
     }
     
@@ -31,6 +37,33 @@ public class CrawlerUnit : Software
         //Sets walking target depending on team
         if (currentTeamName == economyGC.teamName_A) aiCharacterControl.target = economyGC.teamNode_B;
         if (currentTeamName == economyGC.teamName_B) aiCharacterControl.target = economyGC.teamNode_A;
+    }
+
+    public override void Die()
+    {
+
+        //Stop moving
+        aiCharacterControl.target = null;
+       
+        //Base death
+        base.Die();
+
+        //Removes itself from all shooting towers
+        for( int i = 0; i < shootingTowers.Count; i++)
+        {
+            shootingTowers[i].enemiesInRange.Remove(transform);
+
+            //If it was shooting me directly
+            if(shootingTowers[i].targetTransform == transform)
+            {
+                //tell it to look for a new target
+                shootingTowers[i].ChooseTarget();
+            }
+        }
+
+        //Clear the towers
+        shootingTowers.Clear();
+
     }
 
     //ANIMATION
@@ -59,10 +92,14 @@ public class CrawlerUnit : Software
         {
             //Sets target as firewall
             target = collision.gameObject.GetComponent<Firewall>();
-            //Deals damage to target
-            DealDamage(target);
-            //Dies
-            Die();
+            //If its enemy firewall
+            if(target.currentTeamName == currentTeamName)
+            {
+                //Deals damage to target
+                DealDamage(target);
+                //Dies
+                Die();
+            }
         }
     }
 
