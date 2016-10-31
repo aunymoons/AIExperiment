@@ -7,6 +7,9 @@ public class ShootingTowerProjectile : MonoBehaviour {
     public ShootingTower owner;
     public CrawlerUnit target;
 
+    //STATS
+    public float lifetime;
+
     //DAMAGE
     public int damagePoints;
 
@@ -21,8 +24,12 @@ public class ShootingTowerProjectile : MonoBehaviour {
 
     void Start()
     {
+        //Sets basic variables
         if (rigidBody == null) rigidBody = GetComponent<Rigidbody>();
+
+        //Startup
         MoveForward();
+        Invoke("Die", lifetime);
     }
 
     //ACTIONS
@@ -37,18 +44,19 @@ public class ShootingTowerProjectile : MonoBehaviour {
 
     void MoveForward()
     {
-        rigidBody.AddForce(Vector3.forward * projectileSpeed);
+        rigidBody.AddForce(transform.forward * projectileSpeed);
     }
 
     //COLLISION
 
-    void OnTriggerenter(Collider collider)
+    void OnTriggerEnter(Collider other)
     {
         //If its a Crawler
-        if (collider.gameObject.name.Contains("Crawler"))
+        if (other.gameObject.name.Contains("Crawler"))
         {
+            
             //Sets target as Crawler
-            target = collider.gameObject.GetComponent<CrawlerUnit>();
+            target = other.gameObject.GetComponent<CrawlerUnit>();
             
             //if crawler is from opposite team
             if(target.currentTeamName != owner.currentTeamName)

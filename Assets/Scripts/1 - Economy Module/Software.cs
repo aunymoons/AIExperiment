@@ -33,8 +33,6 @@ public abstract class Software : MonoBehaviour
         if (economyGC == null) economyGC = FindObjectOfType<EconomyGC>();
         if (animator == null) animator = GetComponent<Animator>();
 
-        if (economyGC != null) Debug.Log(economyGC);
-
         //Sets healthpoints
         maxHealthPoints = healthPoints;
        
@@ -83,7 +81,7 @@ public abstract class Software : MonoBehaviour
             //Gives oponent the ram cost of this unit
             economyGC.AddRamToPlayer(ramCost, enemyTeamName);
             //Makes death animation
-            AnimateDeath();
+            StartCoroutine(AnimateDeath());
         }
     }
 

@@ -10,6 +10,7 @@ public class ShootingTower : Software
     public GameObject projectilePrefab;
     public Transform gunBarrel;
     public Transform targetTransform;
+    public GameObject lastShotBullet;
 
     //MAIN
     public float reloadTime;
@@ -41,6 +42,9 @@ public class ShootingTower : Software
         //Create a possible target transform
         Transform possibleTarget = null;
 
+        //Sets shortest distance to infinity
+        shortestDistance = Mathf.Infinity;
+
         //For each enemy in range
         for (int i = 0; i < enemiesInRange.Count; i++)
         {
@@ -66,7 +70,7 @@ public class ShootingTower : Software
         //Look at target
         if (targetTransform != null)
         {
-            gunBarrel.transform.LookAt(targetTransform);
+            gun.transform.LookAt(targetTransform);
         }
     }
 
@@ -82,7 +86,12 @@ public class ShootingTower : Software
             audioSource.PlayOneShot(shootSound);
 
             //Instantiate projectile prefab
-            Instantiate(projectilePrefab, gunBarrel);
+            lastShotBullet =  Instantiate(projectilePrefab, gunBarrel.position, gunBarrel.rotation) as GameObject;
+
+            //Assign Owner
+            lastShotBullet.GetComponent<ShootingTowerProjectile>().owner = this;
+            lastShotBullet = null;
+
         }
     }
 
@@ -107,6 +116,13 @@ public class ShootingTower : Software
                 //Add this transform
                 enemiesInRange.Add(other.transform);
 
+                //If its the first enemy
+                if (enemiesInRange.Count == 1)
+                {
+                    //Choose a different target
+                    ChooseTarget();
+                }
+
                 //if current crawler doesnt contain this tower, add it
                 if (!currentCrawler.shootingTowers.Contains(this))
                 {
@@ -130,6 +146,9 @@ public class ShootingTower : Software
             {
                 //Remove it
                 enemiesInRange.Remove(other.transform);
+
+                //Choose a different target
+                ChooseTarget();
 
                 //Tell the tower to aim elsewhere
                 if (currentCrawler.shootingTowers.Contains(this))

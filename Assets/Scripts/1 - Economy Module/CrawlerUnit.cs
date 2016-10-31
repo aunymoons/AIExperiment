@@ -43,7 +43,7 @@ public class CrawlerUnit : Software
     {
 
         //Stop moving
-        aiCharacterControl.target = null;
+        aiCharacterControl.target = transform;
        
         //Base death
         base.Die();
@@ -70,7 +70,8 @@ public class CrawlerUnit : Software
 
     void UpdateHealthBar()
     {
-        healthBarImage.fillAmount = healthPoints / maxHealthPoints;
+        healthBarImage.fillAmount = (float)healthPoints / (float)maxHealthPoints;
+        Debug.Log(healthPoints / maxHealthPoints);
     }
 
     //DAMAGE
