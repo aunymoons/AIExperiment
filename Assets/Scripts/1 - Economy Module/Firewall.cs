@@ -24,7 +24,7 @@ public class Firewall : Software {
 
     void UpdateHealthBar()
     {
-        healthBarImage.fillAmount = healthPoints / maxHealthPoints;
+        healthBarImage.fillAmount = (float)healthPoints / (float)maxHealthPoints;
     }
 
     public override void ReceiveDamage(int damage)
