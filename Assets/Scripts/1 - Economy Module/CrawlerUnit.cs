@@ -71,7 +71,6 @@ public class CrawlerUnit : Software
     void UpdateHealthBar()
     {
         healthBarImage.fillAmount = (float)healthPoints / (float)maxHealthPoints;
-        Debug.Log(healthPoints / maxHealthPoints);
     }
 
     //DAMAGE
@@ -94,7 +93,7 @@ public class CrawlerUnit : Software
             //Sets target as firewall
             target = collision.gameObject.GetComponent<Firewall>();
             //If its enemy firewall
-            if(target.currentTeamName == currentTeamName)
+            if(target.currentTeamName != currentTeamName)
             {
                 //Deals damage to target
                 DealDamage(target);
