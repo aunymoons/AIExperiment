@@ -21,7 +21,6 @@ public class Firewall : Software {
     }
 
     //ACTIONS
-
     void UpdateHealthBar()
     {
         healthBarImage.fillAmount = (float)healthPoints / (float)maxHealthPoints;
