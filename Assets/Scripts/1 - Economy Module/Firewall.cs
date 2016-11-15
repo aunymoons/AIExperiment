@@ -3,7 +3,8 @@ using UnityEngine.UI;
 using System.Collections;
 using System;
 
-public class Firewall : Software {
+public class Firewall : Software
+{
 
     //REFERENCES
 
@@ -38,6 +39,20 @@ public class Firewall : Software {
         audioSource.PlayOneShot(hitSound);
     }
 
-
-
+    void OnTriggerEnter(Collider collider)
+    {
+        if (collider.gameObject.name.Contains("Crawler"))
+        {
+            //Sets target as Crawler
+            target = collider.gameObject.GetComponent<CrawlerUnit>();
+            //If its enemy firewall
+            if (target.currentTeamName != currentTeamName)
+            {
+                //Deals damage to target
+                ReceiveDamage(target.damagePoints);
+                //Dies
+                target.Die();
+            }
+        }
+    }
 }

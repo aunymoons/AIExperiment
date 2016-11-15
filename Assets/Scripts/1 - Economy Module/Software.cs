@@ -71,11 +71,12 @@ public abstract class Software : MonoBehaviour
 
     public virtual void Die()
     {
-        //Ensures install/uninstall progress is stopped
-        StopAllCoroutines();
+        
         //checks if its not dying
         if (!isDying)
         {
+            //Ensures install/uninstall progress is stopped
+            StopAllCoroutines();
             //flag as dying
             isDying = true;
             //Gives oponent the ram cost of this unit

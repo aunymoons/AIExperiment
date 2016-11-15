@@ -87,6 +87,7 @@ public class CrawlerUnit : Software
 
     void OnCollisionEnter(Collision collision)
     {
+        /*
         //If its a firewall
         if (collision.gameObject.name.Contains("Firewall"))
         {
@@ -101,6 +102,7 @@ public class CrawlerUnit : Software
                 Die();
             }
         }
+        */
     }
 
 }
