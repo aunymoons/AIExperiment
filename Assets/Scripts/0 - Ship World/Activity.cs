@@ -104,6 +104,8 @@ public class Activity : MonoBehaviour
             }
 
         }
+
+        //MAKE SURE TO ALWAYS PUT THE "SAVE/TRUE" CHARACTER FIRST WHEN SENDING DATA TO THE FLOWCHARTS
     }
 
     //GET ACCORDING DIALOGUE
