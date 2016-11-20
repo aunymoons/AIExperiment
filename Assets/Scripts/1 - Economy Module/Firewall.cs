@@ -3,55 +3,73 @@ using UnityEngine.UI;
 using System.Collections;
 using System;
 
-public class Firewall : Software
+namespace TowerDefense
 {
-
-    //REFERENCES
-
-    public Image healthBarImage;
-
-    //AUDIO
-
-    public AudioClip hitSound;
-
-    //MAIN METHODS
-
-    public override void OnStart()
+    public class Firewall : Software
     {
-        UpdateHealthBar();
-    }
 
-    //ACTIONS
-    void UpdateHealthBar()
-    {
-        healthBarImage.fillAmount = (float)healthPoints / (float)maxHealthPoints;
-    }
+        //REFERENCES
+        public Collider myCollider;
+        public Image healthBarImage;
 
-    public override void ReceiveDamage(int damage)
-    {
-        //Base
-        base.ReceiveDamage(damage);
+        //AUDIO
 
-        //UpdateHealthBar
-        UpdateHealthBar();
+        public AudioClip hitSound;
 
-        //Play sound
-        audioSource.PlayOneShot(hitSound);
-    }
+        //MAIN METHODS
 
-    void OnTriggerEnter(Collider collider)
-    {
-        if (collider.gameObject.name.Contains("Crawler"))
+        public override void OnStart()
         {
-            //Sets target as Crawler
-            target = collider.gameObject.GetComponent<CrawlerUnit>();
-            //If its enemy firewall
-            if (target.currentTeamName != currentTeamName)
+            base.OnStart();
+            UpdateHealthBar();
+        }
+
+        public override void Die()
+        {
+            base.Die();
+        }
+
+        public override void OnInstall()
+        {
+            base.OnInstall();
+        }
+
+        //ACTIONS
+        void UpdateHealthBar()
+        {
+            healthBarImage.fillAmount = (float)healthPoints / (float)maxHealthPoints;
+        }
+
+        public override void ReceiveDamage(int damage)
+        {
+            //Base
+            base.ReceiveDamage(damage);
+
+            //UpdateHealthBar
+            UpdateHealthBar();
+
+            //Play sound
+            audioSource.PlayOneShot(hitSound);
+        }
+
+        void OnTriggerEnter(Collider collider)
+        {
+            if (collider.gameObject.name.Contains("Crawler"))
             {
-                //Deals damage to target
-                ReceiveDamage(target.damagePoints);
-                //Dies
-                target.Die();
+                //Sets target as Crawler
+                target = collider.gameObject.GetComponent<CrawlerUnit>();
+                //If its enemy firewall
+                if (target.currentTeamName != currentTeamName)
+                {
+                    //Checks if this firewall is done installing
+                    if (isInstalled && !isDying)
+                    {
+                    //Deals damage to target
+                    ReceiveDamage(target.damagePoints);
+                    //Dies
+                    target.Die();
+                    }
+                }
             }
         }
     }
