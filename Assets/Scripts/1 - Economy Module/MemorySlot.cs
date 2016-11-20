@@ -54,7 +54,7 @@ namespace TowerDefense
             isInstalling = true;
 
             //Instantiates the prefab
-            GameObject instance = Instantiate(Resources.Load(installableName + "_" + currentTeamName, typeof(GameObject)), installTransform.position, installTransform.rotation, transform) as GameObject;
+            GameObject instance = Instantiate(Resources.Load(installableName + "_" + currentTeamName, typeof(GameObject)), installTransform.position, installTransform.rotation) as GameObject;
             installedSoftware = instance.GetComponent<Software>();
             installedSoftware.memorySlot = this;
         }
