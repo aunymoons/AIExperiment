@@ -8,14 +8,26 @@ namespace TowerDefense
     {
 
         public List<MemorySlot> influencedSlots;
+        public Node childNode;
         
+        void Start()
+        {
+            SetTeamColor();
+            childNode.parentNode = this;
+            childNode.SetTeam(currentTeamName, enemyTeamName);
+            SetTeamChildren();
+        }
         
+        public void SetTeamChildren()
+        {
+            for(int i = 0; i < influencedSlots.Count; i++)
+            {
+                influencedSlots[i].SetTeam(currentTeamName, enemyTeamName);
+            }
+        }
 
         void Update()
         {
-            if(Input.GetKeyDown("c")){
-                ChangeControllingTeam();
-            }
         }
 
 
@@ -31,33 +43,10 @@ namespace TowerDefense
                 }
                 influencedSlots[i].ChangeTeam();
             }
-
             ChangeTeam();
+            childNode.SetTeam(currentTeamName, enemyTeamName);
+            childNode.SetTeamColor();
         }
-
-
-        void OnTriggerEnter(Collider collider)
-        {
-            /* MAKE THE EQUIVALENT OF THIS FOR THE ACCESSNODE
-            if (collider.gameObject.name.Contains("Crawler"))
-            {
-                //Sets target as Crawler
-                target = collider.gameObject.GetComponent<CrawlerUnit>();
-                //If its enemy firewall
-                if (target.currentTeamName != currentTeamName)
-                {
-                    //Checks if this firewall is done installing
-                    if (isInstalled && !isDying)
-                    {
-                        //Deals damage to target
-                        ReceiveDamage(target.damagePoints);
-                        //Dies
-                        target.Die();
-                    }
-                }
-            }
-            */
-        }
-
+        
     }
 }

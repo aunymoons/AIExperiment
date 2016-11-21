@@ -62,7 +62,7 @@ namespace TowerDefense
                 if (target.currentTeamName != currentTeamName)
                 {
                     //Checks if this firewall is done installing
-                    if (isInstalled && !isDying)
+                    if (isInstalled && !isDying && !target.isDying)
                     {
                     //Deals damage to target
                     ReceiveDamage(target.damagePoints);

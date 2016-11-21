@@ -112,26 +112,31 @@ namespace TowerDefense
                 //Get the crawler unit
                 CrawlerUnit currentCrawler = other.gameObject.GetComponent<CrawlerUnit>();
 
-                //If the enemies in range doesnt contain this transform
-                if (!enemiesInRange.Contains(other.transform))
+                //if its an enemy
+                if (currentCrawler.currentTeamName != currentTeamName)
                 {
-                    //Add this transform
-                    enemiesInRange.Add(other.transform);
-
-                    //If its the first enemy
-                    if (enemiesInRange.Count == 1)
+                    //If the enemies in range doesnt contain this transform
+                    if (!enemiesInRange.Contains(other.transform))
                     {
-                        //Choose a different target
-                        ChooseTarget();
-                    }
+                        //Add this transform
+                        enemiesInRange.Add(other.transform);
 
-                    //if current crawler doesnt contain this tower, add it
-                    if (!currentCrawler.towers.Contains(this))
-                    {
-                        currentCrawler.towers.Add(this);
-                    }
+                        //If its the first enemy
+                        if (enemiesInRange.Count == 1)
+                        {
+                            //Choose a different target
+                            ChooseTarget();
+                        }
 
+                        //if current crawler doesnt contain this tower, add it
+                        if (!currentCrawler.towers.Contains(this) && !currentCrawler.isDying)
+                        {
+                            currentCrawler.towers.Add(this);
+                        }
+
+                    }
                 }
+
             }
         }
 

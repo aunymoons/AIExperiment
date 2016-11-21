@@ -29,7 +29,7 @@ namespace TowerDefense
         public AudioClip installSound, uninstallSound, activateSound, deactivateSound, deathSound;
 
         //MAIN METHODS
-        public void Start()
+        public virtual void Start()
         {
             //Makes sure we have the proper references
             if (economyGC == null) economyGC = FindObjectOfType<EconomyGC>();
@@ -93,6 +93,8 @@ namespace TowerDefense
                 memorySlot.isInstalled = false;
                 memorySlot.isInstalling = false;
                 memorySlot.isUninstalling = false;
+                //Sets healthpoints to 0;
+                healthPoints = 0;
                 //Makes death animation
                 StartCoroutine(AnimateDeath());
             }

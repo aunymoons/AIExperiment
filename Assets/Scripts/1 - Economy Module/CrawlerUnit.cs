@@ -15,6 +15,7 @@ namespace TowerDefense
 
         public AICharacterControl aiCharacterControl;
         public List<Tower> towers;
+        public Collider myCollider;
 
 
         //MAIN VARIABLES
@@ -55,8 +56,14 @@ namespace TowerDefense
             //Stop moving
             aiCharacterControl.target = transform;
 
+            //Stop collider
+            //myCollider.isTrigger = true;
+            
             //Base death
             base.Die();
+
+            //Updates healthbar
+            UpdateHealthBar();
 
             //Removes itself from all shooting towers
             for (int i = 0; i < towers.Count; i++)

@@ -97,8 +97,9 @@ namespace TowerDefense
                 // Make sure the memslot exists
                 if (memSlot != null)
                 {
-                    if (memSlot.currentTeamName == currentTeamName)
-                    {
+                    //Make sure its from your team
+                    //if (memSlot.currentTeamName == currentTeamName)
+                    //{
                         //SendMessage
                         if (message == true)
                         {
@@ -108,7 +109,7 @@ namespace TowerDefense
                         {
                             memSlot.OnTapDeselected();
                         }
-                    }
+                    //}
 
                 }
             }

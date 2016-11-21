@@ -15,6 +15,7 @@ namespace TowerDefense
         public Software installedSoftware;
         public List<GameObject> installablePrefabs_A, installablePrefabs_B;
         public List<GameObject> installableButtons;
+        public List<GameObject> coloredGameObjects;
         public GameObject uninstallButton;
         public GameObject optionCanvas;
 
@@ -126,6 +127,7 @@ namespace TowerDefense
         //Hide Option Canvas
         void HideOptions()
         {
+            //MISSING "IF ITS HIDDEN"
             anim.SetTrigger("hide");
             optionCanvas.SetActive(false);
         }
@@ -146,15 +148,29 @@ namespace TowerDefense
             SetTeamColor();
         }
 
+        public void SetTeam(string current, string enemy)
+        {
+            currentTeamName = current;
+            enemyTeamName = enemy;
+            SetTeamColor();
+        }
+
         public void SetTeamColor()
         {
             if(currentTeamName == "A")
             {
-                GetComponent<Renderer>().material.color = teamColor_A;
+                for (int i = 0; i < coloredGameObjects.Count; i++)
+                {
+                    coloredGameObjects[i].GetComponent<Renderer>().material.color = teamColor_A;
+                }
+
             }
             if (currentTeamName == "B")
             {
-                GetComponent<Renderer>().material.color = teamColor_B;
+                for (int i = 0; i < coloredGameObjects.Count; i++)
+                {
+                    coloredGameObjects[i].GetComponent<Renderer>().material.color = teamColor_B;
+                }
             }
 
         }
