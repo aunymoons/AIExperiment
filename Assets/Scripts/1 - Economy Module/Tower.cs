@@ -34,6 +34,8 @@ namespace TowerDefense
 
         public override void OnStart()
         {
+            base.OnStart();
+
             enemiesInRange = new List<Transform>();
 
             InvokeRepeating("Shoot", 0, reloadTime);

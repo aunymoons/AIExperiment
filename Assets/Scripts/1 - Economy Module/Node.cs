@@ -36,22 +36,7 @@ namespace TowerDefense
             enemyTeamName = enemy;
             SetTeamColor();
         }
-
-        public void SetTeamColor()
-        {
-            if (currentTeamName == "A")
-            {
-                GetComponent<Renderer>().material.color = parentNode.teamColor_A;
-                
-
-            }
-            if (currentTeamName == "B")
-            {
-               GetComponent<Renderer>().material.color = parentNode.teamColor_B;
-                
-            }
-
-        }
+        
 
         public void SwitchTeam()
         {

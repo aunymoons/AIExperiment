@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 namespace TowerDefense
 {
@@ -11,6 +12,7 @@ namespace TowerDefense
         public MemorySlot memorySlot;
         protected Animator animator;
         protected Software target;
+        public List<GameObject> coloredGameObjects;
 
         //MAIN VARIABLES
 
@@ -45,7 +47,11 @@ namespace TowerDefense
             OnStart();
         }
 
-        public virtual void OnStart() { }
+        public virtual void OnStart()
+        {
+            //Theming
+            SetTeamColor();
+        }
 
         //ACTIONS
 
@@ -245,6 +251,25 @@ namespace TowerDefense
             Destroy(gameObject);
         }
 
+        public void SetTeamColor()
+        {
+            if (currentTeamName == "A")
+            {
+                for (int i = 0; i < coloredGameObjects.Count; i++)
+                {
+                    coloredGameObjects[i].GetComponent<Renderer>().material.color = economyGC.teamColor_A;
+                }
+
+            }
+            if (currentTeamName == "B")
+            {
+                for (int i = 0; i < coloredGameObjects.Count; i++)
+                {
+                    coloredGameObjects[i].GetComponent<Renderer>().material.color = economyGC.teamColor_B;
+                }
+            }
+
+        }
 
     }
 }

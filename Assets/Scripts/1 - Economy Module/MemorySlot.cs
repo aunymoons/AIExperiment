@@ -34,13 +34,14 @@ namespace TowerDefense
 
         public string currentTeamName, enemyTeamName; //What team they belong to
 
-        //Theming
-        public Color teamColor_A, teamColor_B;
+        
 
         //MAIN
 
         void Start()
         {
+            //Verifies References
+            if (economyGC == null) economyGC = FindObjectOfType<EconomyGC>();
             if (anim == null) anim = GetComponent<Animator>();
 
             //Themes
@@ -161,7 +162,7 @@ namespace TowerDefense
             {
                 for (int i = 0; i < coloredGameObjects.Count; i++)
                 {
-                    coloredGameObjects[i].GetComponent<Renderer>().material.color = teamColor_A;
+                    coloredGameObjects[i].GetComponent<Renderer>().material.color = economyGC.teamColor_A;
                 }
 
             }
@@ -169,7 +170,7 @@ namespace TowerDefense
             {
                 for (int i = 0; i < coloredGameObjects.Count; i++)
                 {
-                    coloredGameObjects[i].GetComponent<Renderer>().material.color = teamColor_B;
+                    coloredGameObjects[i].GetComponent<Renderer>().material.color = economyGC.teamColor_B;
                 }
             }
 

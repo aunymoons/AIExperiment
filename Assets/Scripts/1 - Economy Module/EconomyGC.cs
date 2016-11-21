@@ -15,6 +15,9 @@ namespace TowerDefense
         public Transform teamNode_A, teamNode_B;
         public Text ramTextMain_A, ramTextSecondary_A, ramTextMain_B, ramTextSecondary_B;
 
+        //Theming
+        public Color teamColor_A, teamColor_B;
+
         // Use this for initialization
         void Start()
         {
