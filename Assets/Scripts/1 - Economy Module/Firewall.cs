@@ -35,7 +35,7 @@ namespace TowerDefense
         }
 
         //ACTIONS
-        void UpdateHealthBar()
+        public void UpdateHealthBar()
         {
             healthBarImage.fillAmount = (float)healthPoints / (float)maxHealthPoints;
         }
@@ -64,10 +64,16 @@ namespace TowerDefense
                     //Checks if this firewall is done installing
                     if (isInstalled && !isDying && !target.isDying)
                     {
-                    //Deals damage to target
-                    ReceiveDamage(target.damagePoints);
-                    //Dies
-                    target.Die();
+                        //to avoid mixups
+                        int originalTargetHealth = target.healthPoints;
+                        int originalHealth = healthPoints;
+                        
+                        //Deals damage to me
+                        ReceiveDamage(originalTargetHealth);
+
+                        //deals damage to target
+                        target.ReceiveDamage(originalHealth);
+
                     }
                 }
             }

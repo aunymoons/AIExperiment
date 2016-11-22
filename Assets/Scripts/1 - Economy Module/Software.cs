@@ -23,7 +23,7 @@ namespace TowerDefense
 
         //STATES
 
-        public bool canUninstall, isInstalled, isDying;
+        public bool canUninstall, isInstalled, isDying, isNode, isTower;
 
         //AUDIO
 
@@ -94,7 +94,8 @@ namespace TowerDefense
                 //flag as dying
                 isDying = true;
                 //Gives oponent the ram cost of this unit
-                economyGC.AddRamToPlayer(ramCost, enemyTeamName);
+                if (healthPoints != 0)
+                    economyGC.AddRamToPlayer((ramCost * healthPoints) / maxHealthPoints, enemyTeamName);
                 //Tells Memslot is no longer occupied
                 memorySlot.isInstalled = false;
                 memorySlot.isInstalling = false;
@@ -114,7 +115,8 @@ namespace TowerDefense
             if (isInstalled && !isDying)
             {
                 //Tell the other object to receive damage
-                targetObject.ReceiveDamage(damagePoints);
+                //targetObject.ReceiveDamage(damagePoints);
+                targetObject.ReceiveDamage(healthPoints); //Temporary test to see if it balances out the units
             }
         }
 
@@ -123,16 +125,36 @@ namespace TowerDefense
             //Check if software is installed
             if (isInstalled && !isDying)
             {
-                //Removes healthpoints
+                //if you have healthpoints to remove
                 if (healthPoints >= 0)
                 {
-                    healthPoints -= damage;
+                    //If the damage is bigger than your remaining healthpoints
+                    if (damage > healthPoints)
+                    {
+                        if (!isNode)
+                            //Removes RAM from you and gives it to team who dealt it based on your remaining life
+                            economyGC.AddRamToPlayer((ramCost * healthPoints) / maxHealthPoints, enemyTeamName); // so it doesnt give more than it has to oponent
+                        //is dead
+                        healthPoints = 0;
+                    }
+                    else
+                    {
+                        healthPoints -= damage;
+                        if (!isNode)
+                            economyGC.AddRamToPlayer((ramCost * damage) / maxHealthPoints, enemyTeamName); // so it gives the damage equivalent to oponent
+                    }
+
+
+
                     if (healthPoints <= 0)
                     {
                         //Makes sure healthpoints never become less than zero for animation purposes
                         healthPoints = 0;
+                        //Dies
                         Die();
                     }
+
+
                 }
             }
         }
@@ -232,11 +254,12 @@ namespace TowerDefense
             audioSource.PlayOneShot(deactivateSound);
 
             //Removes gives RAM from team who spawned it
-            economyGC.AddRamToPlayer(ramCost, currentTeamName);
+            economyGC.AddRamToPlayer((ramCost * healthPoints) / maxHealthPoints, currentTeamName);
             //Waits for animation
             yield return new WaitForSeconds(1f);
             //gets destroyed
             Destroy(gameObject);
+
         }
 
         public virtual IEnumerator AnimateDeath()

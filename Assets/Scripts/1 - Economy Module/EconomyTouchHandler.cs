@@ -35,21 +35,26 @@ namespace TowerDefense
         public void OnFingerTap(LeanFinger finger)
         {
 
+            // Make sure the finger isn't over any GUI elements
+            //if (finger.IsOverGui == false)
+            //{
+
             // Raycast information
-            var ray = finger.GetRay();
-            var hit = default(RaycastHit);
+            Ray ray = finger.GetRay();
+            RaycastHit hit = default(RaycastHit);
 
             // Was this finger pressed down on a collider?
             if (Physics.Raycast(ray, out hit, float.PositiveInfinity, LayerMask) == true)
             {
-                // Select the hit GameObject
-                Select(hit.collider.gameObject);
+                // Select the hit GameObjectk
+                    Select(hit.collider.gameObject, finger);
             }
             else
             {
                 // Nothing was tapped, so deselect
                 Deselect();
             }
+            //}
         }
 
         private void Deselect()
@@ -64,23 +69,33 @@ namespace TowerDefense
             }
         }
 
-        private void Select(GameObject newGameObject)
+        private void Select(GameObject newGameObject, LeanFinger currentFinger)
         {
             // Has the selected GameObject changed?
             if (newGameObject != SelectedGameObject)
             {
+
                 // Deselect the old GameObject
                 Deselect();
 
-                // Change selection
-                SelectedGameObject = newGameObject;
 
-                SendTapMessage(SelectedGameObject, true);
+                if (currentFinger.IsOverGui == false)
+                {
+                    // Change selection
+                    SelectedGameObject = newGameObject;
+
+                    SendTapMessage(SelectedGameObject, true);
+                }
+                    
+
 
             }
             else
             {
-                SendTapMessage(SelectedGameObject, true);
+                if (currentFinger.IsOverGui == false)
+                {
+                    SendTapMessage(SelectedGameObject, true);
+                }
             }
         }
 
@@ -100,15 +115,15 @@ namespace TowerDefense
                     //Make sure its from your team
                     //if (memSlot.currentTeamName == currentTeamName)
                     //{
-                        //SendMessage
-                        if (message == true)
-                        {
-                            memSlot.OnTapSelected();
-                        }
-                        else
-                        {
-                            memSlot.OnTapDeselected();
-                        }
+                    //SendMessage
+                    if (message == true)
+                    {
+                        memSlot.OnTapSelected();
+                    }
+                    else
+                    {
+                        memSlot.OnTapDeselected();
+                    }
                     //}
 
                 }

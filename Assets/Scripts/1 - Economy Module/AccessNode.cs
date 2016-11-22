@@ -46,6 +46,8 @@ namespace TowerDefense
             ChangeTeam();
             childNode.SetTeam(currentTeamName, enemyTeamName);
             childNode.SetTeamColor();
+            childNode.healthPoints = childNode.maxHealthPoints;
+            childNode.UpdateHealthBar();
         }
         
     }

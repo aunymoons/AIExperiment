@@ -12,6 +12,7 @@ namespace TowerDefense
         // Use this for initialization
         public override void Start()
         {
+            isNode = true;
             //dont install
         }
 

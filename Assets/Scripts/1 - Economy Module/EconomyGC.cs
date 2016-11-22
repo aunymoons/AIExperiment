@@ -14,6 +14,8 @@ namespace TowerDefense
         public Animator animator_A, animator_B;
         public Transform teamNode_A, teamNode_B;
         public Text ramTextMain_A, ramTextSecondary_A, ramTextMain_B, ramTextSecondary_B;
+        public Image ramImage_A, ramImage_B;
+        public int maxRamPerPlayer, totalMaxRam;
 
         //Theming
         public Color teamColor_A, teamColor_B;
@@ -21,7 +23,12 @@ namespace TowerDefense
         // Use this for initialization
         void Start()
         {
+            maxRamPerPlayer = totalMaxRam / 2;
+            ram_A = maxRamPerPlayer;
+            ram_B = maxRamPerPlayer;
 
+            UpdateRamText();
+            UpdateRamUI();
         }
 
         // Update is called once per frame
@@ -44,7 +51,7 @@ namespace TowerDefense
             }
             if (team == teamName_A || team == teamName_B)
             {
-                //AnimateRamPoints("-" + ram, team);
+                AnimateRamPoints("-" + ram, team);
             }
         }
 
@@ -60,7 +67,7 @@ namespace TowerDefense
             }
             if (team == teamName_A || team == teamName_B)
             {
-                //AnimateRamPoints("+" + ram, team);
+                AnimateRamPoints("+" + ram, team);
             }
         }
 
@@ -81,12 +88,19 @@ namespace TowerDefense
             }
             //Updates UI
             UpdateRamText();
+            UpdateRamUI();
         }
 
         public void UpdateRamText()
         {
             ramTextMain_A.text = ram_A.ToString();
             ramTextMain_B.text = ram_B.ToString();
+        }
+        
+        public void UpdateRamUI()
+        {
+            ramImage_A.fillAmount = (float)ram_A / totalMaxRam; 
+            ramImage_B.fillAmount = (float)ram_B / totalMaxRam;
         }
 
     }
