@@ -19,6 +19,7 @@ namespace TowerDefense
         public GameObject uninstallButton;
         public GameObject optionCanvas;
         public CanvasGroup optionCanvasGroup;
+        PayButton currentButton;
 
 
         //INSTALLATION
@@ -118,7 +119,7 @@ namespace TowerDefense
         public void Install(string installableName)
         {
             //Hides UI
-            //HideOptions();
+            HideOptions();
 
             if (CheckPrice(installableName))
             {
@@ -139,8 +140,7 @@ namespace TowerDefense
         public void FinishInstall()
         {
             Debug.Log("Software was INSTALLED");
-            //Hides UI
-            HideOptions();
+            
             isInstalling = false;
             isInstalled = true;
         }
@@ -161,13 +161,25 @@ namespace TowerDefense
         }
         //INTERACTION
 
-        public void OnTapSelected()
+        public void OnTapSelected(bool isUI)
         {
+            if(!isUI)
             ShowOptions();
+
+            if (isUI)
+            {
+                Debug.Log("is clicking on UI");
+            }
+            else
+            {
+                Debug.Log("is clicking OUTSIDE UI");
+            }
+            
         }
 
-        public void OnTapDeselected()
+        public void OnTapDeselected(bool isUI)
         {
+            
             HideOptions();
         }
 
@@ -203,10 +215,8 @@ namespace TowerDefense
         //Update buttons
         void UpdateButtons()
         {
-            PayButton currentButton;
             for (int i = 0; i < installableButtons.Count; i++)
             {
-                //installableButtons[i].SetActive(true);
                 currentButton = installableButtons[i].GetComponent<PayButton>();
                 currentButton.currentTeamName = currentTeamName;
                 currentButton.enemyTeamName = enemyTeamName;
@@ -222,21 +232,21 @@ namespace TowerDefense
             {
                 installableButtons[i].SetActive(!installed);
             }
+            
         }
         //Hide Option Canvas
         void HideOptions()
         {
             //MISSING "IF ITS HIDDEN"
             anim.SetTrigger("hide");
+            //optionCanvasGroup.alpha = 0;
+            //optionCanvasGroup.interactable = false;
             StartCoroutine(tempHide());
-            //optionCanvas.SetActive(false);
         }
 
         IEnumerator tempHide()
         {
             yield return new WaitForSeconds(0.1f);
-            //optionCanvasGroup.alpha = 0;
-            //optionCanvasGroup.interactable = false;
             optionCanvas.SetActive(false);
         }
 

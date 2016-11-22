@@ -13,7 +13,7 @@ namespace TowerDefense
         public int price;
         public string currentTeamName, enemyTeamName;
 
-        void Start()
+        void Awake()
         {
             economyGC = FindObjectOfType<EconomyGC>();
             installButton = GetComponent<Button>();

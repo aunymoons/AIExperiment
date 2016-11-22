@@ -52,17 +52,17 @@ namespace TowerDefense
             else
             {
                 // Nothing was tapped, so deselect
-                Deselect();
+                Deselect(finger);
             }
             //}
         }
 
-        private void Deselect()
+        private void Deselect(LeanFinger currentFinger)
         {
             // Is there a selected GameObject?
             if (SelectedGameObject != null)
             {
-                SendTapMessage(SelectedGameObject, false);
+                SendTapMessage(SelectedGameObject, false, currentFinger.IsOverGui);
 
                 // Mark selected GameObject null
                 SelectedGameObject = null;
@@ -74,32 +74,22 @@ namespace TowerDefense
             // Has the selected GameObject changed?
             if (newGameObject != SelectedGameObject)
             {
-
                 // Deselect the old GameObject
-                Deselect();
+                Deselect(currentFinger);
+                // Change selection
+                SelectedGameObject = newGameObject;
 
-
-                if (currentFinger.IsOverGui == false)
-                {
-                    // Change selection
-                    SelectedGameObject = newGameObject;
-
-                    SendTapMessage(SelectedGameObject, true);
-                }
-                    
-
-
+                SendTapMessage(SelectedGameObject, true, currentFinger.IsOverGui);
+                
             }
             else
             {
-                if (currentFinger.IsOverGui == false)
-                {
-                    SendTapMessage(SelectedGameObject, true);
-                }
+                    SendTapMessage(SelectedGameObject, true, currentFinger.IsOverGui);
+                
             }
         }
 
-        private void SendTapMessage(GameObject gameObject, bool message)
+        private void SendTapMessage(GameObject gameObject, bool message, bool isUI)
         {
 
 
@@ -118,11 +108,11 @@ namespace TowerDefense
                     //SendMessage
                     if (message == true)
                     {
-                        memSlot.OnTapSelected();
+                        memSlot.OnTapSelected(isUI);
                     }
                     else
                     {
-                        memSlot.OnTapDeselected();
+                        memSlot.OnTapDeselected(isUI);
                     }
                     //}
 
