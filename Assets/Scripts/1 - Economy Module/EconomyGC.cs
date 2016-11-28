@@ -11,7 +11,7 @@ namespace TowerDefense
         public string teamName_A, teamName_B;
         public int teamMembers_A, teamMembers_B;
         public int ram_A, ram_B;
-        public Animator animator_A, animator_B;
+        public Animator animator_A, animator_B, animatorGeneric;
         public Transform teamNode_A, teamNode_B;
         public Text ramTextMain_A, ramTextSecondary_A, ramTextMain_B, ramTextSecondary_B;
         public Image ramImage_A, ramImage_B;
@@ -35,6 +35,25 @@ namespace TowerDefense
         void Update()
         {
 
+        }
+
+        //INHERITED
+        public override void WinGame(string winTeam, string looseTeam)
+        {
+            if (!isGameOver){
+                isGameOver = true;
+
+                if(winTeam == teamName_A)
+                {
+                    Debug.Log("team A WON");
+                    animatorGeneric.SetTrigger("ATeamWon");
+                }
+                if (winTeam == teamName_B)
+                {
+                    Debug.Log("team B WON");
+                    animatorGeneric.SetTrigger("BTeamWon");
+                }
+            }
         }
 
         //ACTIONS

@@ -8,6 +8,7 @@ public class GameController : MonoBehaviour
     public Animator animator;
     //STATE
     public bool isMultiplayer;
+    public bool isGameOver;
 
 
     // Use this for initialization
@@ -23,7 +24,7 @@ public class GameController : MonoBehaviour
     }
 
     //MAIN
-    public virtual void WinGame()
+    public virtual void WinGame(string winTeam, string looseTeam)
     {
 
     }

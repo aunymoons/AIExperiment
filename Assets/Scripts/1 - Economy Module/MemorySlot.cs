@@ -139,7 +139,7 @@ namespace TowerDefense
 
         public void FinishInstall()
         {
-            Debug.Log("Software was INSTALLED");
+            //Debug.Log("Software was INSTALLED");
             
             isInstalling = false;
             isInstalled = true;
@@ -147,7 +147,7 @@ namespace TowerDefense
 
         public void Uninstall()
         {
-            Debug.Log("Software is being UNINSTALLED");
+            //Debug.Log("Software is being UNINSTALLED");
             isUninstalling = true;
 
             installedSoftware.Uninstall();
@@ -155,7 +155,7 @@ namespace TowerDefense
 
         public void FinishUninstall()
         {
-            Debug.Log("Software was UNINSTALLED");
+            //Debug.Log("Software was UNINSTALLED");
             isUninstalling = false;
             isInstalled = false;
         }
@@ -168,11 +168,11 @@ namespace TowerDefense
 
             if (isUI)
             {
-                Debug.Log("is clicking on UI");
+                //Debug.Log("is clicking on UI");
             }
             else
             {
-                Debug.Log("is clicking OUTSIDE UI");
+                //Debug.Log("is clicking OUTSIDE UI");
             }
             
         }

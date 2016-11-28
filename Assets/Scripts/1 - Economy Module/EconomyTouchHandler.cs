@@ -6,6 +6,10 @@ namespace TowerDefense
 {
     public class EconomyTouchHandler : MonoBehaviour
     {
+
+        //REFERENCES
+        public EconomyGC economyGC;
+
         public string currentTeamName;
 
         [Tooltip("This stores the layers we want the raycast to hit (make sure this GameObject's layer is included!)")]
@@ -19,6 +23,11 @@ namespace TowerDefense
 
         [Tooltip("The color of the selected GameObject")]
         public Color SelectedColor = Color.green;
+
+        public void Start()
+        {
+            if (economyGC == null) economyGC = FindObjectOfType<EconomyGC>();
+        }
 
         protected virtual void OnEnable()
         {
@@ -34,27 +43,29 @@ namespace TowerDefense
 
         public void OnFingerTap(LeanFinger finger)
         {
-
-            // Make sure the finger isn't over any GUI elements
-            //if (finger.IsOverGui == false)
-            //{
-
-            // Raycast information
-            Ray ray = finger.GetRay();
-            RaycastHit hit = default(RaycastHit);
-
-            // Was this finger pressed down on a collider?
-            if (Physics.Raycast(ray, out hit, float.PositiveInfinity, LayerMask) == true)
+            if (!economyGC.isGameOver)
             {
-                // Select the hit GameObjectk
+                // Make sure the finger isn't over any GUI elements
+                //if (finger.IsOverGui == false)
+                //{
+
+                // Raycast information
+                Ray ray = finger.GetRay();
+                RaycastHit hit = default(RaycastHit);
+
+                // Was this finger pressed down on a collider?
+                if (Physics.Raycast(ray, out hit, float.PositiveInfinity, LayerMask) == true)
+                {
+                    // Select the hit GameObjectk
                     Select(hit.collider.gameObject, finger);
+                }
+                else
+                {
+                    // Nothing was tapped, so deselect
+                    Deselect(finger);
+                }
+                //}
             }
-            else
-            {
-                // Nothing was tapped, so deselect
-                Deselect(finger);
-            }
-            //}
         }
 
         private void Deselect(LeanFinger currentFinger)
@@ -80,12 +91,12 @@ namespace TowerDefense
                 SelectedGameObject = newGameObject;
 
                 SendTapMessage(SelectedGameObject, true, currentFinger.IsOverGui);
-                
+
             }
             else
             {
-                    SendTapMessage(SelectedGameObject, true, currentFinger.IsOverGui);
-                
+                SendTapMessage(SelectedGameObject, true, currentFinger.IsOverGui);
+
             }
         }
 

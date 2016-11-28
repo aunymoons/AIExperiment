@@ -9,6 +9,8 @@ namespace TowerDefense
 
         public List<MemorySlot> influencedSlots;
         public Node childNode;
+
+        public bool isMain;
         
         void Start()
         {
@@ -48,6 +50,10 @@ namespace TowerDefense
             childNode.SetTeamColor();
             childNode.healthPoints = childNode.maxHealthPoints;
             childNode.UpdateHealthBar();
+            if (isMain)
+            {
+                economyGC.WinGame(currentTeamName, enemyTeamName);
+            }
         }
         
     }
