@@ -23,6 +23,7 @@ namespace TowerDefense
         // Use this for initialization
         void Start()
         {
+
             maxRamPerPlayer = totalMaxRam / 2;
             ram_A = maxRamPerPlayer;
             ram_B = maxRamPerPlayer;
